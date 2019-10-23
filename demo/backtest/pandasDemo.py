@@ -53,5 +53,41 @@ def turtle_test(loadtype='tushare', dataString='pyalg'):
     plt.plot()
 
 
+def gubi_test(ts_code="300408.SZ", loadtype='tushare', dataString='pyalg'):
+    """
+    :param dataString:
+    :return:
+    """
+    # 从dataFrame中加载，
+    if loadtype == 'tushare':
+        from utils import tushare_helper as th
+        dat = th.pro_adj_bar(ts_code=ts_code).rename({'trade_date': 'date'})
+        dat.index.name = 'date'
+    else:
+        dat = pd.read_csv("../../api/stock/csv/600848.csv", index_col=0, encoding='gbk')
+    feed = dataFramefeed.Feed()
+    feed.addBarsFromDataFrame("orcl", dat)
+    myStrategy = pdr.turtle(feed, "orcl", 20, 10)
+    # Attach a returns analyzers to the strategy.
+    returnsAnalyzer = returns.Returns()
+    myStrategy.attachAnalyzer(returnsAnalyzer)
+
+    # Attach the plotter to the strategy.
+    plt = plotter.StrategyPlotter(myStrategy)
+    # Plot the simple returns on each bar.
+    plt.getOrCreateSubplot("returns").addDataSeries("Simple returns", returnsAnalyzer.getReturns())
+
+    if dataString == 'pyalg_util':
+        ds = pyalg_utils.dataSet(myStrategy)  # 抽取交易数据集语句，若使用系统自带画图功能则不需要该项
+    myStrategy.run()
+    myStrategy.info("Final portfolio value: $%.2f" % myStrategy.getResult())
+
+    if dataString == 'pyalg_util':
+        rs = ds.getDefault()  # 获取默认的交易信息，dic格式
+        plot(rs["cumulativeReturns"][:, 0], rs["cumulativeReturns"][:, 1])  # 简单作图示例
+
+    plt.plot()
+
+
 if __name__ == '__main__':
-    turtle_test(loadtype="csv")
+    gubi_test()
