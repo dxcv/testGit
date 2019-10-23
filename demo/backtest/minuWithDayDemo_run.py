@@ -30,11 +30,10 @@ class ENE_backtest(strategy.BacktestingStrategy):
         # MA10[-1]包含今天的收盘价内容，所以取过去的10天值再加上当前分钟线的OPEN（也就是上一个bar的close值）值
         # ENE轨道走到某一日的五分钟的时候是变动的，但是判断上升趋势则按日线（11日）的前天和昨天
         self.__MA10 = ma.SMA(self.__feed_day[instrument].getCloseDataSeries(), 10, 5)
+        self.__MA1 = ma.SMA(self.__feed_day[instrument].getCloseDataSeries(), 1, 5)
         self.__MA11 = ma.SMA(self.__feed_day[instrument].getCloseDataSeries(), 11, 5)
         self.__MA20 = ma.SMA(self.__feed_day[instrument].getCloseDataSeries(), 20, 5)
 
-        self.__EMA12 = ma.EMA(self.__feed_day[instrument].getCloseDataSeries(), 12, 5)
-        self.__EMA50 = ma.EMA(self.__feed_day[instrument].getCloseDataSeries(), 50, 5)
         ##############各种信号量########
         self.initState = False  # 开头的几个过滤掉
         self.eneUpMode = False  # ENE 日线向下
@@ -51,6 +50,7 @@ class ENE_backtest(strategy.BacktestingStrategy):
         self.min_ma20 = ma.SMA(self.__feed[instrument].getCloseDataSeries(), 20)  # 5分线5均
         self.min_ma30 = ma.SMA(self.__feed[instrument].getCloseDataSeries(), 30)  # 5分线5均
         self.min_ma60 = ma.SMA(self.__feed[instrument].getCloseDataSeries(), 60)  # 5分线5均
+        self.min_ma120 = ma.SMA(self.__feed[instrument].getCloseDataSeries(), 120)  # 5分线5均
 
         self.__count = 0
 
@@ -89,16 +89,16 @@ class ENE_backtest(strategy.BacktestingStrategy):
         ##检查分钟均线状况
 
     def checkMinCondition(self):
-        if self.min_ma5[-1] > self.min_ma10[-1] > self.min_ma20[-1] > self.min_ma30[-1] > self.min_ma60[-1]:  # 多头排列
+        if self.min_ma5[-1] > self.min_ma10[-1] > self.min_ma20[-1] > self.min_ma30[-1] > self.min_ma60[-1] > self.min_ma120[-1]:  # 多头排列
             return 'UP'
-        if self.min_ma5[-1] < self.min_ma10[-1] < self.min_ma20[-1] < self.min_ma30[-1] < self.min_ma60[-1]:  # 空头排列
+        if self.min_ma5[-1] < self.min_ma10[-1] < self.min_ma20[-1] < self.min_ma30[-1] < self.min_ma60[-1] < self.min_ma120[-1]:  # 空头排列
             return 'DOWN'
 
         return 'UN_FLUNE'  # 多空不明
 
     ##检查ENE轨道状况   
     def checkENECondition(self):
-        if self.__MA10[-1] > self.__MA20[-1]:
+        if self.__MA11[-1] > self.__MA11[-3]:
         # if self.__EMA12[-1] > self.__EMA12[-2]:
             eneSignal = 'UP'
         else:
@@ -111,14 +111,13 @@ class ENE_backtest(strategy.BacktestingStrategy):
         self.__count += 1
         # if self.__count>500:
         # return
-        if(bars.getDateTime().year<2018):
-            return
+
 
         if self.initState is False:  # 如果MA均线有数值了才开始计算
-            if self.__MA10.__len__() != 5:
+            if self.__MA11.__len__() != 5:
                 return
             else:
-                if self.__MA10[-5] is None:
+                if self.__MA11[-5] is None:
                     return
                 else:
                     self.initState = True
@@ -133,17 +132,16 @@ class ENE_backtest(strategy.BacktestingStrategy):
         self.__ENE = (self.__UPPER + self.__LOWER) / 2
 
 
-
-
         price = bars[self.__instrument].getOpen()
         # print "分鐘線",bars.getDateTime()
         buySignal = False
         sellSignal = False
 
+        self.buyWaitSignal is False
 
 
         if self.__position is None or not self.__position.isOpen() and self.buyWaitSignal is False:  # 未持有,未下穿过
-            if self.checkENECondition() and price > self.__MA20[-1]:  # 上升通道
+            if self.checkENECondition() == 'UP':  # 上升通道
                 # print '上升通道',bars.getDateTime(),price,self.__UPPER
                 if price > self.__ENE:
                     return
@@ -189,15 +187,12 @@ class ENE_backtest(strategy.BacktestingStrategy):
                 elif price >= self.__UPPER:  # 上穿上轨准备卖出
                     self.sellWaitSignal = True
                     self.sellinfo = "上升趋势买入,上穿上轨"
-                elif price >= self.buyPrice * 1.10:
+                # elif price >= self.buyPrice * 1.15:
+                #     self.sellWaitSignal = True
+                #     self.sellinfo = "上升趋势买入,15%止盈"
+                elif price < self.buyPrice * 0.9:
                     self.sellWaitSignal = True
-                    self.sellinfo = "上升趋势买入,10%止盈"
-                elif price < self.__MA20[-1]*0.97:
-                    self.sellWaitSignal = True
-                    self.sellinfo = "上升趋势买入,跌破20天线止损"
-                elif price < self.buyPrice * 0.92:
-                    self.sellWaitSignal = True
-                    self.sellinfo = "上升趋势买入,5%止损"
+                    self.sellinfo = "上升趋势买入,10%止损"
                 else:  # 上轨和下之间不予理睬
                     return
 

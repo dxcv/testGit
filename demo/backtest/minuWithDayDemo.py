@@ -53,9 +53,10 @@ def ENE(type='old', code='600281SH'):
     dat.index = dat['Date Time']
     dat.index.name = 'date'
 
+    dat['year'] = dat['Date Time'].map(lambda x: x[0:4])
     # dat = dat.ix[17000:18000,:]
     feed = dataFramefeed.Feed(frequency=bar.Frequency.MINUTE)
-    feed.addBarsFromDataFrame("orcl", dat)
+    feed.addBarsFromDataFrame("orcl", dat[dat['year']>'2016'])
 
     if type == 'macd':
         myStrategy = mdd.ENE_backtest(feed, 'orcl')
@@ -78,6 +79,6 @@ def ENE(type='old', code='600281SH'):
 
 
 if __name__ == '__main__':
-    stock_code = '002456.SZ'.replace('.','')
+    stock_code = '300408.SZ'.replace('.','')
     # ENE_trans_data()
     ENE('old', stock_code)
