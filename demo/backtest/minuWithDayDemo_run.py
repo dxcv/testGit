@@ -33,7 +33,7 @@ class ENE_backtest(strategy.BacktestingStrategy):
         self.__MA1 = ma.SMA(self.__feed_day[instrument].getCloseDataSeries(), 1, 5)
         self.__MA11 = ma.SMA(self.__feed_day[instrument].getCloseDataSeries(), 11, 5)
         self.__MA20 = ma.SMA(self.__feed_day[instrument].getCloseDataSeries(), 20, 5)
-
+df
         ##############各种信号量########
         self.initState = False  # 开头的几个过滤掉
         self.eneUpMode = False  # ENE 日线向下
