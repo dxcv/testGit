@@ -41,8 +41,8 @@ class ENE_backtest(strategy.BacktestingStrategy):
         self.__MA50 = ma.EMA(self.__feed_day[instrument].getCloseDataSeries(), 50, 5)
         self.__MA60 = ma.EMA(self.__feed_day[instrument].getCloseDataSeries(), 60, 5)
 
-        self.__EMA12 = ma.EMA(self.__feed_day[instrument].getCloseDataSeries(), 12, 5)
-        self.__EMA50 = ma.EMA(self.__feed_day[instrument].getCloseDataSeries(), 50, 5)
+        self.__EMA12 = ma.EMA(self.__feed_day[instrument].getCloseDataSeries(), 12, 10)
+        self.__EMA50 = ma.EMA(self.__feed_day[instrument].getCloseDataSeries(), 50, 10)
 
         ##############各种信号量########
         self.initState = False  # 开头的几个过滤掉
@@ -177,6 +177,11 @@ class ENE_backtest(strategy.BacktestingStrategy):
                 #     self.sellWaitSignal = True
                 #     self.sellinfo = "上升趋势买入,上穿上轨"
                 # el
+                # if all([self.__EMA12[x] < self.__EMA50[x] for x in range(-1,-11,-1)]):
+                #     self.sellWaitSignal = True
+                #     self.sellinfo = "上升趋势买入,转势卖出"
+                # el
+                #十天空头排列GBJX
                 if price >= self.buyPrice * 1.15:
                     self.sellWaitSignal = True
                     self.sellinfo = "上升趋势买入,15%止盈"

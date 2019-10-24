@@ -79,6 +79,6 @@ def ENE(type='old', code='600281SH'):
 
 
 if __name__ == '__main__':
-    stock_code = '002456.SZ'.replace('.','')
+    stock_code = '300408.SZ'.replace('.','')
     # ENE_trans_data()
     ENE('old', stock_code)
