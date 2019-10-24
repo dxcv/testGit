@@ -41,6 +41,7 @@ class ENE_backtest(strategy.BacktestingStrategy):
         self.__MA50 = ma.EMA(self.__feed_day[instrument].getCloseDataSeries(), 50, 5)
         self.__MA60 = ma.EMA(self.__feed_day[instrument].getCloseDataSeries(), 60, 5)
 
+        self.__EMA12 = ma.EMA(self.__feed_day[instrument].getCloseDataSeries(), 12, 5)
         self.__EMA50 = ma.EMA(self.__feed_day[instrument].getCloseDataSeries(), 50, 5)
 
         ##############各种信号量########
@@ -110,7 +111,10 @@ class ENE_backtest(strategy.BacktestingStrategy):
                        self.__MA15[-1])
         maxLong = max(self.__MA30[-1], self.__MA35[-1], self.__MA40[-1], self.__MA45[-1], self.__MA50[-1],
                       self.__MA60[-1])
-        if minShort > maxLong:
+
+        if minShort > maxLong and all([self.__EMA12[x] > self.__EMA50[x] for x in range(-1,-6,-1)]):
+            # for i in range(5):
+            #     print(self.__EMA12[i],self.__EMA50[i])
             eneSignal = 'UP'
         else:
             eneSignal = 'DOWN'
@@ -176,9 +180,9 @@ class ENE_backtest(strategy.BacktestingStrategy):
                 if price >= self.buyPrice * 1.15:
                     self.sellWaitSignal = True
                     self.sellinfo = "上升趋势买入,15%止盈"
-                elif price < self.buyPrice * 0.9:
+                elif price < self.buyPrice * 0.8:
                     self.sellWaitSignal = True
-                    self.sellinfo = "上升趋势买入,10%止损"
+                    self.sellinfo = "上升趋势买入,20%止损"
                 else:  # 上轨和下之间不予理睬
                     return
 

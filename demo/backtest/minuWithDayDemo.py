@@ -56,7 +56,7 @@ def ENE(type='old', code='600281SH'):
     dat['year'] = dat['Date Time'].map(lambda x: x[0:4])
     # dat = dat.ix[17000:18000,:]
     feed = dataFramefeed.Feed(frequency=bar.Frequency.MINUTE)
-    feed.addBarsFromDataFrame("orcl", dat[dat['year']>'2016'])
+    feed.addBarsFromDataFrame("orcl", dat[dat['year']>'2015'])
 
     if type == 'macd':
         myStrategy = mdd.ENE_backtest(feed, 'orcl')
