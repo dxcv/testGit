@@ -127,7 +127,7 @@ class RowParser(dataFrameBarfeed.RowParser):
         open_ = float(row[1]['open'])
         high = float(row[1]['high'])
         low = float(row[1]['low'])
-        volume = float(row[1]['vol'])
+        volume = float(row[1]['volume'])
         adjClose = float(row[1][5])
         
         if self.__sanitize:
