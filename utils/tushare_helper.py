@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 import tushare as ts
 from datetime import datetime, date, time
+import pandas as pd
 
 
 # 单例
@@ -24,15 +25,5 @@ def pro_adj_bar(ts_code='', start_date='', end_date='', freq='D'):
 
 
 if __name__ == '__main__':
-    dd = ts.pro_bar(ts_code='300408.SZ', api=TushareApi.pro, adj='qfq', freq="1MIN", start_date="20191023",
-                      end_date="20191024")
-
-    df =pro_adj_bar(ts_code='300408.SZ')
-    df['Adj Close'] = df['close']
-    df = df.rename(
-        columns={'trade_date': 'Date Time', 'open': 'Open', 'high': 'High', 'vol': 'Volume', 'close': 'Close',
-                 'low': 'Low'})
-    print(df[['Date Time', 'Open', 'High', 'Volume','Close','Low','Adj Close']])
-
-    print(df.info())
-    print(df.head())
+    df = TushareApi.pro.top10_holders(ts_code='600000.SH', start_date='20190101', end_date='20191231')
+    df.to_csv("abc.csv")
