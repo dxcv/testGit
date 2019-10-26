@@ -1,8 +1,6 @@
-# -*- coding: UTF-8 -*-
 import tushare as ts
-from datetime import datetime, date, time
 import pandas as pd
-import time as tt
+import time
 
 
 # 单例
@@ -26,12 +24,19 @@ def pro_adj_bar(ts_code='', start_date='', end_date='', freq='D'):
 
 
 if __name__ == '__main__':
-    stockCodeList = TushareApi.pro.stock_basic(exchange='', list_status='L', fields='ts_code,symbol,name,area,industry,list_date')
-    list = []
-    for index, row in stockCodeList.head(100).iterrows():
+    stock_code_list = TushareApi.pro.stock_basic(exchange='', list_status='L',
+                                                 fields='ts_code,symbol,name,area,industry,list_date')
+    top10_list = []
+    for index, row in stock_code_list.iterrows():
         df = TushareApi.pro.top10_holders(ts_code=row['ts_code'], start_date='20190101', end_date='20191231')
-        df = df.head(10)[df.head(10)['holder_name'].str.contains(pat = '中国证券金融股份有限公司')]
-        df.empty or list.append(df)
-        (index+1) % 78 == 0 and tt.sleep(60)
-    dd = pd.concat(list,ignore_index=True)
-    dd.to_csv("abc.csv")
+        df = df.head(10)[df.head(10)['holder_name'].str.contains(pat='中国证券金融股份有限公司')]
+        df.empty or top10_list.append(df)
+        (index + 1) % 78 == 0 and time.sleep(60)
+    dd = pd.concat(top10_list, ignore_index=True)
+    dd = pd.merge(dd, stock_code_list)
+    dd = dd.rename(columns={'symbol': '代码', 'name': '名称', 'area': '地区', 'industry': '行业', 'holder_name': '股东名称',
+                            'ann_date': '发布日期', 'end_date': '结束日期',
+                            'hold_amount': '持有数量', 'hold_ratio': '持有比例'})
+    print(dd.info())
+    dd.to_excel("output.xlsx", engine='xlsxwriter', index=False,
+                columns=['代码', '名称', '地区', '行业', '股东名称', '发布日期', '结束日期', '持有数量', '持有比例'])
