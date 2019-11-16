@@ -26,6 +26,7 @@ def pro_adj_bar(ts_code='', start_date='', end_date='', freq='D'):
 if __name__ == '__main__':
     stock_code_list = TushareApi.pro.stock_basic(exchange='', list_status='L',
                                                  fields='ts_code,symbol,name,area,industry,list_date')
+    print(stock_code_list.info())
     top10_list = []
     for index, row in stock_code_list.iterrows():
         df = TushareApi.pro.top10_holders(ts_code=row['ts_code'], start_date='20190101', end_date='20191231')
