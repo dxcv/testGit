@@ -10,7 +10,6 @@ def format_data(data):
 
 
 def get_company_detail(x):
-    time.sleep(random.random())
     url = "http://gs.amac.org.cn/amac-infodisc/res/pof/manager/" + x
     rr = requests.get(url)
     rr.encoding = 'utf-8'
@@ -41,12 +40,10 @@ def get_company_detail(x):
     product_list.extend(tr_list[27 - diff].find_all("a"))
     product['product_list'] = "|".join(map(lambda s: format_data(s.string).replace("（", "(").replace("）", ")"),
                                            product_list))
-    print(product['product_list'])
     return element, product
 
 
-if __name__ == '__main__':
-    keyword = "王"
+def load_company_detail(keyword=""):
     payload = dict() if keyword == "" else {"keyword": keyword}
     url_list = []
     is_last = False
@@ -59,11 +56,13 @@ if __name__ == '__main__':
         is_last = dd['last']
         page += 1
         is_last or time.sleep(random.random() * 10)
+    return map(get_company_detail, url_list)
 
-    company_list = list(map(get_company_detail, url_list[0:5]))
 
+if __name__ == '__main__':
+    keyword = "王"
+    company_list = list(load_company_detail(keyword))
     df = pd.DataFrame(map(lambda x: x[0], company_list))
-    print(df)
     df.to_excel('requests.xlsx', index=False,
                 engine='xlsxwriter',
                 columns=['基金管理人全称(中文)', '办公地址', '注册资本', '实缴资本',
@@ -71,5 +70,4 @@ if __name__ == '__main__':
                          '机构网址', '法定代表人', '机构信息最后更新时间', '特别提示信息',
                          '详细信息网址', '产品数量(暂行前)', '产品数量(暂行后)', '机构诚信信息'])
     company_product = pd.DataFrame(map(lambda x: x[1], company_list))
-    print(company_product)
-    company_product.to_csv("product.csv")
+    company_product.to_csv("products.csv", index=False)
