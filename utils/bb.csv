@@ -1,0 +1,3 @@
+,id,company_name,company_id,code,end_date,pub_date,change_reason_id,change_reason,shareholder_rank,shareholder_name,shareholder_name_en,shareholder_id,shareholder_class_id,shareholder_class,share_number,share_ratio,sharesnature_id,sharesnature,share_pledge_freeze,share_pledge,share_freeze
+1,1942849,平安银行股份有限公司,430000001,000001.XSHE,2019-09-30,2019-10-22,306019.0,定期报告,2,香港中央结算有限公司,Hong Kong Securities Clearing Company Ltd.,100011907.0,307099.0,其他机构,1422412276.0,7.33,308007,流通A股,,,
+4,1942852,平安银行股份有限公司,430000001,000001.XSHE,2019-09-30,2019-10-22,306019.0,定期报告,5,中国证券金融股份有限公司,"China Securities Finance Co., Ltd.",300023366.0,307099.0,其他机构,429232688.0,2.21,308007,流通A股,,,

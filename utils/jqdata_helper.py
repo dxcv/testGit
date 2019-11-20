@@ -10,7 +10,7 @@ def load_top10_data(fun=(lambda x: x), ext="all", force=False):
     if not force and os.path.exists(path):
         return pd.read_csv(path)
     else:
-        jqdatasdk.auth("13234097668", "Abc13234097668")
+        jqdatasdk.auth("******", "*******")
         stocks = list(jqdatasdk.get_all_securities(['stock']).index)
         df_list = []
         for code in stocks:

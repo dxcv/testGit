@@ -1,0 +1,8 @@
+,id,company_name,company_id,code,end_date,pub_date,change_reason_id,change_reason,shareholder_rank,shareholder_name,shareholder_name_en,shareholder_id,shareholder_class_id,shareholder_class,share_number,share_ratio,sharesnature_id,sharesnature,share_pledge_freeze,share_pledge,share_freeze
+1,1942849,平安银行股份有限公司,430000001,000001.XSHE,2019-09-30,2019-10-22,306019.0,定期报告,2,香港中央结算有限公司,Hong Kong Securities Clearing Company Ltd.,100011907.0,307099.0,其他机构,1422412276.0,7.33,308007,流通A股,,,
+4,1942852,平安银行股份有限公司,430000001,000001.XSHE,2019-09-30,2019-10-22,306019.0,定期报告,5,中国证券金融股份有限公司,"China Securities Finance Co., Ltd.",300023366.0,307099.0,其他机构,429232688.0,2.21,308007,流通A股,,,
+15,1950213,万科企业股份有限公司,430000002,000002.XSHE,2019-09-30,2019-10-25,306019.0,定期报告,6,香港中央结算有限公司,Hong Kong Securities Clearing Company Ltd.,100011907.0,307099.0,其他机构,421222293.0,3.73,308007,流通A股,,,
+43,1964573,深圳市振业(集团)股份有限公司,430000006,000006.XSHE,2019-09-30,2019-10-30,306019.0,定期报告,4,中国证券金融股份有限公司,"China Securities Finance Co., Ltd.",300023366.0,307099.0,其他机构,14598400.0,1.08,308007,流通A股,,,
+77,1954062,中国宝安集团股份有限公司,430000009,000009.XSHE,2019-09-30,2019-10-26,306019.0,定期报告,8,香港中央结算有限公司,Hong Kong Securities Clearing Company Ltd.,100011907.0,307099.0,其他机构,16214966.0,0.63,308007,流通A股,,,
+125,1977490,康佳集团股份有限公司,430000016,000016.XSHE,2019-09-30,2019-10-31,306019.0,定期报告,6,香港中央结算有限公司,Hong Kong Securities Clearing Company Ltd.,100011907.0,307099.0,其他机构,23763169.0,0.99,308007,流通A股,,,
+174,1977499,深圳长城开发科技股份有限公司,430000021,000021.XSHE,2019-09-30,2019-10-31,306019.0,定期报告,5,香港中央结算有限公司,Hong Kong Securities Clearing Company Ltd.,100011907.0,307099.0,其他机构,13009158.0,0.88,308007,流通A股,,,
